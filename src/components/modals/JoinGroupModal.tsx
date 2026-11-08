@@ -4,7 +4,6 @@ import {
   Users, 
   Check, 
   AlertCircle, 
-  AlertTriangle,
   ArrowRight, 
   ShoppingBag, 
   Wallet,
@@ -293,18 +292,18 @@ export function JoinGroupModal({
 
   return (
     <div 
-      className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-3.5 sm:p-4 overscroll-none font-sans"
+      className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 overscroll-contain font-sans"
       onClick={onClose}
     >
       <div 
-        className="bg-surface dark:bg-[#12151c] w-full max-w-[420px] sm:max-w-md rounded-3xl shadow-2xl border border-neutral-200/90 dark:border-neutral-800 overflow-hidden animate-in fade-in zoom-in-95 duration-150 flex flex-col"
+        className="bg-surface dark:bg-[#12151c] w-full max-w-[400px] rounded-3xl shadow-2xl border border-neutral-200/90 dark:border-neutral-800 flex flex-col max-h-[min(92dvh,calc(100vh-2rem))] overflow-hidden animate-in fade-in zoom-in-95 duration-150"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Brand Top Header */}
-        <div className="px-5 py-3 border-b border-neutral-200/80 dark:border-neutral-800 flex items-center justify-between shrink-0">
+        {/* Brand Top Header: Slim & Clean */}
+        <div className="px-4 py-2.5 sm:py-3 border-b border-neutral-200/80 dark:border-neutral-800 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-2 select-none">
-            <div className="w-7 h-7 rounded-xl bg-google-blue text-white flex items-center justify-center shadow-xs shrink-0">
-              <Wallet size={15} strokeWidth={2.2} />
+            <div className="w-6 h-6 rounded-lg bg-google-blue text-white flex items-center justify-center shadow-xs shrink-0">
+              <Wallet size={13} strokeWidth={2.2} />
             </div>
             <span className="text-sm font-bold tracking-tight text-text-primary">
               Hisaab Barabar
@@ -313,135 +312,105 @@ export function JoinGroupModal({
           <button 
             type="button"
             onClick={onClose} 
-            className="w-8 h-8 rounded-full border border-neutral-200 dark:border-neutral-800 flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-surface-hover cursor-pointer transition-colors shrink-0"
+            className="w-7 h-7 rounded-full border border-neutral-200 dark:border-neutral-800 flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-surface-hover cursor-pointer transition-colors shrink-0"
             aria-label="Close"
           >
-            <X size={15} />
+            <X size={14} />
           </button>
         </div>
 
-        {/* Content Body: Designed for pristine legibility with zero cropping */}
-        <div className="p-5 sm:p-6 space-y-4">
+        {/* Content Body: Highly readable font sizes, perfectly comfortable line height */}
+        <div className="p-4 sm:p-5 overflow-y-auto overscroll-contain space-y-3.5">
           {/* SCENARIO 1: ARRIVED VIA INVITE LINK */}
           {hasInviteLinkCode ? (
-            <div className="space-y-4">
-              {/* Editorial Header Section */}
-              <div className="text-center space-y-1.5">
+            <div className="space-y-3.5">
+              {/* Editorial Header */}
+              <div className="text-center space-y-1">
                 <div className="flex items-center justify-center gap-2 flex-wrap">
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border border-neutral-200/90 dark:border-neutral-800 bg-neutral-50/70 dark:bg-neutral-900/70 text-neutral-700 dark:text-neutral-300">
-                    <IndianRupee size={12} className="text-google-blue dark:text-blue-400" />
+                  <span className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-xs font-medium border border-neutral-200/90 dark:border-neutral-800 bg-neutral-50/70 dark:bg-neutral-900/70 text-neutral-700 dark:text-neutral-300">
+                    <IndianRupee size={11} className="text-google-blue dark:text-blue-400" />
                     <span>{isSplit ? 'Split Ledger' : 'Expense Tracker'}</span>
                   </span>
                   <button
                     type="button"
                     onClick={handleCopyInviteCode}
-                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-medium border border-neutral-200/90 dark:border-neutral-800 bg-neutral-50/70 dark:bg-neutral-900/70 text-text-secondary hover:text-google-blue cursor-pointer transition-colors"
+                    className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-xs font-mono font-medium border border-neutral-200/90 dark:border-neutral-800 bg-neutral-50/70 dark:bg-neutral-900/70 text-text-secondary hover:text-google-blue cursor-pointer transition-colors"
                     title="Copy invite code"
                   >
                     <span>Code: {initialCode || code}</span>
-                    {copiedCode ? <Check size={12} className="text-emerald-500" /> : <Copy size={12} />}
+                    {copiedCode ? <Check size={11} className="text-emerald-500" /> : <Copy size={11} />}
                   </button>
                 </div>
 
-                <h2 className="text-2xl sm:text-3xl font-serif text-text-primary tracking-tight leading-[1.2] pt-1">
+                <h2 className="text-xl sm:text-2xl font-serif text-text-primary tracking-tight leading-snug pt-1">
                   Join <span className="italic text-google-blue dark:text-blue-400 font-serif font-normal">"{effectiveName || (isSplit ? 'Split Group' : 'Shared Ledger')}"</span>
                 </h2>
 
-                <p className="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 max-w-xs sm:max-w-sm mx-auto leading-normal">
+                <p className="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 max-w-xs sm:max-w-sm mx-auto leading-normal">
                   {isSplit
                     ? 'Who owes whom? · 1-tap UPI & debt simplification'
                     : 'Where did the money go? · Shared tracking & budgets'}
                 </p>
               </div>
 
-              {/* Perfectly Legible Feature Highlights Card: No truncation, full sentences wrap cleanly */}
-              <div className="rounded-2xl bg-neutral-50/70 dark:bg-neutral-900/60 border border-neutral-200/90 dark:border-neutral-800 p-4 space-y-3.5 text-left">
+              {/* Crystal Clear Capability List: Generous font sizes, zero cropping, natural wrap */}
+              <div className="rounded-2xl bg-neutral-50/70 dark:bg-neutral-900/60 border border-neutral-200/90 dark:border-neutral-800 p-3.5 space-y-2.5 text-left">
                 {isSplit ? (
                   <>
-                    <div className="flex items-start gap-3">
-                      <div className="w-8 h-8 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-google-blue dark:text-blue-400 flex items-center justify-center shrink-0 mt-0.5">
-                        <Users size={16} strokeWidth={2.2} />
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-6 h-6 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-google-blue dark:text-blue-400 flex items-center justify-center shrink-0">
+                        <Users size={14} strokeWidth={2.2} />
                       </div>
-                      <div className="min-w-0 flex-1">
-                        <div className="text-xs sm:text-sm font-semibold text-text-primary leading-snug">
-                          Fair Bill Splits
-                        </div>
-                        <div className="text-[11px] sm:text-xs text-neutral-500 dark:text-neutral-400 mt-0.5 leading-relaxed">
-                          Split dining, trips, and flat rent equally or by exact shares without awkward reminders.
-                        </div>
-                      </div>
+                      <span className="text-xs sm:text-sm text-text-primary font-medium leading-snug">
+                        Split dining, trips &amp; rent without awkward math
+                      </span>
                     </div>
 
-                    <div className="flex items-start gap-3">
-                      <div className="w-8 h-8 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-google-blue dark:text-blue-400 flex items-center justify-center shrink-0 mt-0.5">
-                        <ArrowLeftRight size={16} strokeWidth={2.2} />
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-6 h-6 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-google-blue dark:text-blue-400 flex items-center justify-center shrink-0">
+                        <ArrowLeftRight size={14} strokeWidth={2.2} />
                       </div>
-                      <div className="min-w-0 flex-1">
-                        <div className="text-xs sm:text-sm font-semibold text-text-primary leading-snug">
-                          Simplified Net Balances
-                        </div>
-                        <div className="text-[11px] sm:text-xs text-neutral-500 dark:text-neutral-400 mt-0.5 leading-relaxed">
-                          Automatic debt simplification so everyone settles with the fewest transactions.
-                        </div>
-                      </div>
+                      <span className="text-xs sm:text-sm text-text-primary font-medium leading-snug">
+                        Smart debt simplification to minimize transfers
+                      </span>
                     </div>
 
-                    <div className="flex items-start gap-3">
-                      <div className="w-8 h-8 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-google-blue dark:text-blue-400 flex items-center justify-center shrink-0 mt-0.5">
-                        <QrCode size={16} strokeWidth={2.2} />
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-6 h-6 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-google-blue dark:text-blue-400 flex items-center justify-center shrink-0">
+                        <QrCode size={14} strokeWidth={2.2} />
                       </div>
-                      <div className="min-w-0 flex-1">
-                        <div className="text-xs sm:text-sm font-semibold text-text-primary leading-snug">
-                          1-Tap UPI Settlements
-                        </div>
-                        <div className="text-[11px] sm:text-xs text-neutral-500 dark:text-neutral-400 mt-0.5 leading-relaxed">
-                          Settle dues directly in Google Pay, PhonePe, Paytm, or scan UPI QR codes.
-                        </div>
-                      </div>
+                      <span className="text-xs sm:text-sm text-text-primary font-medium leading-snug">
+                        1-tap instant settlements via GPay, PhonePe, Paytm
+                      </span>
                     </div>
                   </>
                 ) : (
                   <>
-                    <div className="flex items-start gap-3">
-                      <div className="w-8 h-8 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-google-blue dark:text-blue-400 flex items-center justify-center shrink-0 mt-0.5">
-                        <Wallet size={16} strokeWidth={2.2} />
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-6 h-6 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-google-blue dark:text-blue-400 flex items-center justify-center shrink-0">
+                        <Wallet size={14} strokeWidth={2.2} />
                       </div>
-                      <div className="min-w-0 flex-1">
-                        <div className="text-xs sm:text-sm font-semibold text-text-primary leading-snug">
-                          Shared Expense Tracking
-                        </div>
-                        <div className="text-[11px] sm:text-xs text-neutral-500 dark:text-neutral-400 mt-0.5 leading-relaxed">
-                          Log household spending together with real-time category totals.
-                        </div>
-                      </div>
+                      <span className="text-xs sm:text-sm text-text-primary font-medium leading-snug">
+                        Log family &amp; household spending in real-time
+                      </span>
                     </div>
 
-                    <div className="flex items-start gap-3">
-                      <div className="w-8 h-8 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-google-blue dark:text-blue-400 flex items-center justify-center shrink-0 mt-0.5">
-                        <IndianRupee size={16} strokeWidth={2.2} />
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-6 h-6 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-google-blue dark:text-blue-400 flex items-center justify-center shrink-0">
+                        <IndianRupee size={14} strokeWidth={2.2} />
                       </div>
-                      <div className="min-w-0 flex-1">
-                        <div className="text-xs sm:text-sm font-semibold text-text-primary leading-snug">
-                          Monthly Category Budgets
-                        </div>
-                        <div className="text-[11px] sm:text-xs text-neutral-500 dark:text-neutral-400 mt-0.5 leading-relaxed">
-                          Set spending caps on groceries, bills, and domestic expenses.
-                        </div>
-                      </div>
+                      <span className="text-xs sm:text-sm text-text-primary font-medium leading-snug">
+                        Monthly category budgets for groceries &amp; bills
+                      </span>
                     </div>
 
-                    <div className="flex items-start gap-3">
-                      <div className="w-8 h-8 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-google-blue dark:text-blue-400 flex items-center justify-center shrink-0 mt-0.5">
-                        <ShoppingBag size={16} strokeWidth={2.2} />
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-6 h-6 rounded-lg bg-blue-50 dark:bg-blue-950/60 text-google-blue dark:text-blue-400 flex items-center justify-center shrink-0">
+                        <ShoppingBag size={14} strokeWidth={2.2} />
                       </div>
-                      <div className="min-w-0 flex-1">
-                        <div className="text-xs sm:text-sm font-semibold text-text-primary leading-snug">
-                          Collaborative Buying List
-                        </div>
-                        <div className="text-[11px] sm:text-xs text-neutral-500 dark:text-neutral-400 mt-0.5 leading-relaxed">
-                          Live checklist to add home essentials and tick off purchases.
-                        </div>
-                      </div>
+                      <span className="text-xs sm:text-sm text-text-primary font-medium leading-snug">
+                        Live collaborative checklist for home essentials
+                      </span>
                     </div>
                   </>
                 )}
@@ -449,14 +418,14 @@ export function JoinGroupModal({
 
               {/* Error Notice */}
               {errorMsg ? (
-                <div className="space-y-2 pt-1 animate-in fade-in duration-200">
-                  <div className="p-3 rounded-2xl bg-amber-500/10 border border-amber-500/25 text-text-primary text-center space-y-1">
+                <div className="space-y-1.5 pt-0.5 animate-in fade-in duration-200">
+                  <div className="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/25 text-text-primary text-center space-y-0.5">
                     <h4 className="text-xs font-semibold text-text-primary">
                       {errorMsg.includes('expired') || errorMsg.includes('regenerated')
                         ? 'Invite Link Inactive'
                         : 'Notice'}
                     </h4>
-                    <p className="text-xs text-neutral-500 dark:text-neutral-400 leading-normal">
+                    <p className="text-xs text-neutral-500 dark:text-neutral-400 leading-tight">
                       {errorMsg}
                     </p>
                   </div>
@@ -469,7 +438,7 @@ export function JoinGroupModal({
                         setForceManualInput(true);
                         setCode('');
                       }}
-                      className="flex-1 h-10 bg-google-blue hover:bg-google-blue-hover text-white rounded-full text-xs font-semibold transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-xs"
+                      className="flex-1 h-9 bg-google-blue hover:bg-google-blue-hover text-white rounded-full text-xs font-semibold transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-xs"
                     >
                       <span>Enter Code</span>
                     </button>
@@ -477,15 +446,15 @@ export function JoinGroupModal({
                     <button
                       type="button"
                       onClick={onClose}
-                      className="h-10 px-4 rounded-full border border-neutral-300 dark:border-neutral-700 hover:bg-surface-hover text-text-secondary hover:text-text-primary text-xs font-medium transition-colors cursor-pointer"
+                      className="h-9 px-3.5 rounded-full border border-neutral-300 dark:border-neutral-700 hover:bg-surface-hover text-text-secondary hover:text-text-primary text-xs font-medium transition-colors cursor-pointer"
                     >
                       Close
                     </button>
                   </div>
                 </div>
               ) : isJoining ? (
-                <div className="p-4 rounded-2xl bg-neutral-50/50 dark:bg-neutral-900/50 border border-neutral-200/90 dark:border-neutral-800 flex items-center justify-center gap-2.5 text-center">
-                  <div className="w-5 h-5 rounded-full border-2 border-google-blue border-t-transparent animate-spin shrink-0" />
+                <div className="p-3.5 rounded-xl bg-neutral-50/50 dark:bg-neutral-900/50 border border-neutral-200/90 dark:border-neutral-800 flex items-center justify-center gap-2 text-center">
+                  <div className="w-4 h-4 rounded-full border-2 border-google-blue border-t-transparent animate-spin shrink-0" />
                   <span className="text-xs sm:text-sm font-semibold text-text-primary">
                     Connecting to {isSplit ? 'Split ' : ''}Ledger...
                   </span>
@@ -504,7 +473,7 @@ export function JoinGroupModal({
                     <span>Join {isSplit ? 'Split Group ' : 'Ledger '}with Google</span>
                   </button>
 
-                  <p className="text-[11px] sm:text-xs text-neutral-500 dark:text-neutral-400 text-center font-normal">
+                  <p className="text-xs text-neutral-500 dark:text-neutral-400 text-center font-normal">
                     Synced across every device · No app install needed
                   </p>
 
@@ -530,7 +499,7 @@ export function JoinGroupModal({
                         <div className="font-semibold text-text-primary truncate leading-tight">
                           {user.displayName || 'Google User'}
                         </div>
-                        <div className="text-[11px] text-text-secondary truncate">
+                        <div className="text-xs text-text-secondary truncate">
                           {user.email}
                         </div>
                       </div>
@@ -574,7 +543,7 @@ export function JoinGroupModal({
             </div>
           ) : (
             /* SCENARIO 2: MANUAL JOIN VIA INVITE CODE */
-            <div className="space-y-3.5">
+            <div className="space-y-3">
               {!user ? (
                 <div className="text-center space-y-3 py-1">
                   <div className="space-y-1">
@@ -652,7 +621,7 @@ export function JoinGroupModal({
                         </button>
                       )}
                     </div>
-                    <p className="text-[11px] text-neutral-500 dark:text-neutral-400 mt-1.5 text-center">
+                    <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1.5 text-center">
                       Paste the 8-character code or shared link from your ledger admin.
                     </p>
                   </div>
