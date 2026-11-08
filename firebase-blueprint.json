@@ -1,0 +1,147 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User account profile for Hisaab Barabar",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "maxLength": 128 },
+        "email": { "type": "string", "maxLength": 256 },
+        "displayName": { "type": "string", "maxLength": 128 },
+        "photoURL": { "type": "string", "maxLength": 1024 },
+        "createdAt": { "type": "string", "maxLength": 64 },
+        "lastLoginAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["uid", "email"]
+    },
+    "Group": {
+      "title": "Group",
+      "description": "Expense group with member access control, custom categories, and role management",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "maxLength": 100 },
+        "createdBy": { "type": "string", "maxLength": 128 },
+        "ownerEmail": { "type": "string", "maxLength": 256 },
+        "memberUids": { "type": "array", "items": { "type": "string" } },
+        "memberEmails": { "type": "array", "items": { "type": "string" } },
+        "members": { "type": "object" },
+        "customCategories": { "type": "object" },
+        "inviteCode": { "type": "string", "maxLength": 32 },
+        "type": { "type": "string", "enum": ["budget", "split"] },
+        "createdAt": { "type": "string", "maxLength": 64 },
+        "updatedAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["name", "createdBy", "memberUids", "memberEmails", "members"]
+    },
+    "Expense": {
+      "title": "Expense",
+      "description": "Individual transaction entry inside a group",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "maxLength": 150 },
+        "amount": { "type": "number" },
+        "category": { "type": "string", "maxLength": 50 },
+        "date": { "type": "string", "maxLength": 32 },
+        "settled": { "type": "boolean" },
+        "originalAmount": { "type": "number" },
+        "note": { "type": "string", "maxLength": 500 },
+        "groupId": { "type": "string", "maxLength": 128 },
+        "createdBy": { "type": "string", "maxLength": 128 },
+        "createdByName": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "maxLength": 64 },
+        "paidBy": { "type": "string", "maxLength": 128 },
+        "paidByName": { "type": "string", "maxLength": 128 },
+        "splitMode": { "type": "string", "enum": ["equal", "exact"] },
+        "splitMembers": { "type": "array", "items": { "type": "string" } },
+        "splits": { "type": "object" },
+        "isSettlement": { "type": "boolean" },
+        "settledTo": { "type": "string", "maxLength": 128 },
+        "settledToName": { "type": "string", "maxLength": 128 }
+      },
+      "required": ["name", "amount", "category", "date", "settled", "groupId"]
+    },
+    "ShoppingItem": {
+      "title": "ShoppingItem",
+      "description": "Item in shared group procurement list",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "maxLength": 100 },
+        "status": { "type": "string", "enum": ["pending", "bought"] },
+        "date": { "type": "string", "maxLength": 32 },
+        "groupId": { "type": "string", "maxLength": 128 },
+        "category": { "type": "string", "maxLength": 50 },
+        "byWhen": { "type": "string", "maxLength": 50 },
+        "createdBy": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["name", "status", "date", "groupId"]
+    },
+    "RecurringExpense": {
+      "title": "RecurringExpense",
+      "description": "Fixed or recurring expense template for a group",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "maxLength": 100 },
+        "amount": { "type": "number" },
+        "frequency": { "type": "string", "maxLength": 32 },
+        "category": { "type": "string", "maxLength": 50 },
+        "startDate": { "type": "string", "maxLength": 32 },
+        "status": { "type": "string", "enum": ["active", "cancelled"] },
+        "groupId": { "type": "string", "maxLength": 128 },
+        "createdBy": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["name", "amount", "frequency", "category", "groupId"]
+    },
+    "GroupNotification": {
+      "title": "GroupNotification",
+      "description": "Cross-device notification for group expense summaries and buying list alerts",
+      "type": "object",
+      "properties": {
+        "groupId": { "type": "string", "maxLength": 128 },
+        "groupName": { "type": "string", "maxLength": 100 },
+        "type": { "type": "string", "enum": ["DAILY_EXPENSE_SUMMARY", "BUYING_ITEM_ADDED"] },
+        "title": { "type": "string", "maxLength": 150 },
+        "message": { "type": "string", "maxLength": 500 },
+        "itemName": { "type": "string", "maxLength": 100 },
+        "itemCategory": { "type": "string", "maxLength": 50 },
+        "itemByWhen": { "type": "string", "maxLength": 50 },
+        "totalAmount": { "type": "number" },
+        "expenseCount": { "type": "number" },
+        "membersWithAccess": { "type": "array", "items": { "type": "string" } },
+        "date": { "type": "string", "maxLength": 32 },
+        "createdBy": { "type": "string", "maxLength": 128 },
+        "createdByName": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "maxLength": 64 },
+        "readBy": { "type": "array", "items": { "type": "string" } }
+      },
+      "required": ["groupId", "type", "title", "message", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "Private user account profile"
+    },
+    "/groups/{groupId}": {
+      "schema": "Group",
+      "description": "Shared expense group metadata, members, and access roles"
+    },
+    "/groups/{groupId}/expenses/{expenseId}": {
+      "schema": "Expense",
+      "description": "Transactions for a specific expense group"
+    },
+    "/groups/{groupId}/shopping/{itemId}": {
+      "schema": "ShoppingItem",
+      "description": "Shopping list items for an expense group"
+    },
+    "/groups/{groupId}/recurring/{recurringId}": {
+      "schema": "RecurringExpense",
+      "description": "Recurring expense schedules for an expense group"
+    },
+    "/groups/{groupId}/notifications/{notificationId}": {
+      "schema": "GroupNotification",
+      "description": "Real-time notifications for group members across devices"
+    }
+  }
+}

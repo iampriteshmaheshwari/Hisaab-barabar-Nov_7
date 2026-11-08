@@ -1,0 +1,6 @@
+{
+  "name": "Hisaab Barabar",
+  "description": "Collaborative expense manager with group sharing, role-based access, multi-device sync, and transaction tracking.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

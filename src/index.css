@@ -1,0 +1,130 @@
+@import url('https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400..600&display=swap');
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-google-blue: var(--google-blue);
+  --color-google-blue-hover: var(--google-blue-hover);
+  --color-google-red: var(--google-red);
+  --color-google-yellow: var(--google-yellow);
+  --color-google-green: var(--google-green);
+  --color-bg-main: var(--bg-main);
+  --color-surface: var(--surface);
+  --color-surface-hover: var(--surface-hover);
+  --color-surface-active: var(--surface-active);
+  --color-surface-card: var(--surface-card);
+  --color-text-primary: var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-border: var(--border);
+
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Google Sans", "Inter", system-ui, sans-serif;
+  --font-serif: "Newsreader", "New York", "Charter", "Playfair Display", Georgia, Cambria, "Times New Roman", serif;
+}
+
+:root {
+  --google-blue: #1a73e8;
+  --google-blue-hover: #1557b0;
+  --google-red: #d93025;
+  --google-yellow: #f9ab00;
+  --google-green: #188038;
+  --bg-main: #f8f9fa;
+  --surface: #ffffff;
+  --surface-hover: #f1f3f4;
+  --surface-active: #e8eaed;
+  --surface-card: #ffffff;
+  --text-primary: #1f1f1f;
+  --text-secondary: #5e6368;
+  --border: rgba(0, 0, 0, 0.08);
+}
+
+:root.dark {
+  --google-blue: #2563eb;
+  --google-blue-hover: #1d4ed8;
+  --google-red: #ef4444;
+  --google-yellow: #f59e0b;
+  --google-green: #10b981;
+  --bg-main: #0c0d10;
+  --surface: #15171c;
+  --surface-hover: #1e2128;
+  --surface-active: #282c35;
+  --surface-card: #181b21;
+  --text-primary: #f3f4f6;
+  --text-secondary: #9ca3af;
+  --border: rgba(255, 255, 255, 0.08);
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+  touch-action: manipulation;
+  background-color: var(--bg-main);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+}
+
+#root {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Universal: Hide scrollbars across all elements while keeping full scrolling capability */
+* {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+}
+
+*::-webkit-scrollbar {
+  display: none !important;
+  width: 0px !important;
+  height: 0px !important;
+}
+
+html, body {
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+}
+
+html::-webkit-scrollbar, body::-webkit-scrollbar {
+  display: none !important;
+  width: 0px !important;
+  height: 0px !important;
+}
+
+/* Hide number input arrows */
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+/* Prevent iOS Safari / WebKit auto-zooming on focus by enforcing >=16px font-size on mobile */
+@media screen and (max-width: 768px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+}
+
+/* Accessible Toast Progress Indicator */
+@keyframes toastProgress {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(0);
+  }
+}
