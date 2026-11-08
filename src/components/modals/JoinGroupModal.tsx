@@ -293,130 +293,154 @@ export function JoinGroupModal({
 
   return (
     <div 
-      className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 overscroll-none font-sans"
+      className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-3.5 sm:p-4 overscroll-none font-sans"
       onClick={onClose}
     >
       <div 
-        className="bg-surface dark:bg-[#12151c] w-full max-w-sm sm:max-w-md rounded-2xl sm:rounded-3xl shadow-2xl border border-neutral-200/90 dark:border-neutral-800 overflow-hidden animate-in fade-in zoom-in-95 duration-150 flex flex-col"
+        className="bg-surface dark:bg-[#12151c] w-full max-w-[420px] sm:max-w-md rounded-3xl shadow-2xl border border-neutral-200/90 dark:border-neutral-800 overflow-hidden animate-in fade-in zoom-in-95 duration-150 flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Brand Top Header: Aligns with Landing Page header */}
-        <div className="px-4 py-2.5 sm:py-3 border-b border-neutral-200/80 dark:border-neutral-800 flex items-center justify-between shrink-0">
+        {/* Brand Top Header */}
+        <div className="px-5 py-3 border-b border-neutral-200/80 dark:border-neutral-800 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-2 select-none">
-            <div className="w-6 h-6 rounded-lg bg-google-blue text-white flex items-center justify-center shadow-xs shrink-0">
-              <Wallet size={13} strokeWidth={2.2} />
+            <div className="w-7 h-7 rounded-xl bg-google-blue text-white flex items-center justify-center shadow-xs shrink-0">
+              <Wallet size={15} strokeWidth={2.2} />
             </div>
-            <span className="text-[13px] sm:text-[14px] font-bold tracking-tight text-text-primary">
+            <span className="text-sm font-bold tracking-tight text-text-primary">
               Hisaab Barabar
             </span>
           </div>
           <button 
             type="button"
             onClick={onClose} 
-            className="w-7 h-7 rounded-full border border-neutral-200 dark:border-neutral-800 flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-surface-hover cursor-pointer transition-colors shrink-0"
+            className="w-8 h-8 rounded-full border border-neutral-200 dark:border-neutral-800 flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-surface-hover cursor-pointer transition-colors shrink-0"
             aria-label="Close"
           >
-            <X size={13} />
+            <X size={15} />
           </button>
         </div>
 
-        {/* Content Body: Guaranteed Zero-Scroll */}
-        <div className="p-4 sm:p-5 space-y-2.5 sm:space-y-3">
+        {/* Content Body: Designed for pristine legibility with zero cropping */}
+        <div className="p-5 sm:p-6 space-y-4">
           {/* SCENARIO 1: ARRIVED VIA INVITE LINK */}
           {hasInviteLinkCode ? (
-            <div className="space-y-2.5 sm:space-y-3">
-              {/* Compact Editorial Header Section */}
-              <div className="text-center space-y-1">
-                <div className="flex items-center justify-center gap-1.5 flex-wrap">
-                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-medium border border-neutral-200 dark:border-neutral-800 bg-neutral-50/70 dark:bg-neutral-900/70 text-neutral-700 dark:text-neutral-300">
-                    <IndianRupee size={10} className="text-google-blue dark:text-blue-400" />
+            <div className="space-y-4">
+              {/* Editorial Header Section */}
+              <div className="text-center space-y-1.5">
+                <div className="flex items-center justify-center gap-2 flex-wrap">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium border border-neutral-200/90 dark:border-neutral-800 bg-neutral-50/70 dark:bg-neutral-900/70 text-neutral-700 dark:text-neutral-300">
+                    <IndianRupee size={12} className="text-google-blue dark:text-blue-400" />
                     <span>{isSplit ? 'Split Ledger' : 'Expense Tracker'}</span>
                   </span>
                   <button
                     type="button"
                     onClick={handleCopyInviteCode}
-                    className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] sm:text-[11px] font-mono font-medium border border-neutral-200 dark:border-neutral-800 bg-neutral-50/70 dark:bg-neutral-900/70 text-text-secondary hover:text-google-blue cursor-pointer transition-colors"
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-medium border border-neutral-200/90 dark:border-neutral-800 bg-neutral-50/70 dark:bg-neutral-900/70 text-text-secondary hover:text-google-blue cursor-pointer transition-colors"
                     title="Copy invite code"
                   >
                     <span>Code: {initialCode || code}</span>
-                    {copiedCode ? <Check size={10} className="text-emerald-500" /> : <Copy size={10} />}
+                    {copiedCode ? <Check size={12} className="text-emerald-500" /> : <Copy size={12} />}
                   </button>
                 </div>
 
-                <h2 className="text-lg sm:text-2xl font-serif text-text-primary tracking-tight leading-snug pt-0.5">
+                <h2 className="text-2xl sm:text-3xl font-serif text-text-primary tracking-tight leading-[1.2] pt-1">
                   Join <span className="italic text-google-blue dark:text-blue-400 font-serif font-normal">"{effectiveName || (isSplit ? 'Split Group' : 'Shared Ledger')}"</span>
                 </h2>
 
-                <p className="text-[11px] sm:text-xs text-neutral-500 dark:text-neutral-400 max-w-xs mx-auto leading-tight">
+                <p className="text-xs sm:text-sm text-neutral-500 dark:text-neutral-400 max-w-xs sm:max-w-sm mx-auto leading-normal">
                   {isSplit
                     ? 'Who owes whom? · 1-tap UPI & debt simplification'
                     : 'Where did the money go? · Shared tracking & budgets'}
                 </p>
               </div>
 
-              {/* High-Density Feature Card: Crisp 1-Liners */}
-              <div className="p-2.5 sm:p-3 rounded-2xl bg-neutral-50/60 dark:bg-neutral-900/50 border border-neutral-200/90 dark:border-neutral-800 space-y-1.5 text-[11px] sm:text-xs">
+              {/* Perfectly Legible Feature Highlights Card: No truncation, full sentences wrap cleanly */}
+              <div className="rounded-2xl bg-neutral-50/70 dark:bg-neutral-900/60 border border-neutral-200/90 dark:border-neutral-800 p-4 space-y-3.5 text-left">
                 {isSplit ? (
                   <>
-                    <div className="flex items-center gap-2">
-                      <div className="w-5 h-5 rounded-md bg-blue-50 dark:bg-blue-950/60 text-google-blue dark:text-blue-400 flex items-center justify-center shrink-0">
-                        <Users size={12} strokeWidth={2.2} />
+                    <div className="flex items-start gap-3">
+                      <div className="w-8 h-8 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-google-blue dark:text-blue-400 flex items-center justify-center shrink-0 mt-0.5">
+                        <Users size={16} strokeWidth={2.2} />
                       </div>
-                      <div className="truncate">
-                        <span className="font-semibold text-text-primary">Split Bills:</span>{' '}
-                        <span className="text-neutral-500 dark:text-neutral-400">Equal or custom shares for trips &amp; dining</span>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-2">
-                      <div className="w-5 h-5 rounded-md bg-blue-50 dark:bg-blue-950/60 text-google-blue dark:text-blue-400 flex items-center justify-center shrink-0">
-                        <ArrowLeftRight size={12} strokeWidth={2.2} />
-                      </div>
-                      <div className="truncate">
-                        <span className="font-semibold text-text-primary">Net Balances:</span>{' '}
-                        <span className="text-neutral-500 dark:text-neutral-400">Debt simplification to minimize transfers</span>
+                      <div className="min-w-0 flex-1">
+                        <div className="text-xs sm:text-sm font-semibold text-text-primary leading-snug">
+                          Fair Bill Splits
+                        </div>
+                        <div className="text-[11px] sm:text-xs text-neutral-500 dark:text-neutral-400 mt-0.5 leading-relaxed">
+                          Split dining, trips, and flat rent equally or by exact shares without awkward reminders.
+                        </div>
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-2">
-                      <div className="w-5 h-5 rounded-md bg-blue-50 dark:bg-blue-950/60 text-google-blue dark:text-blue-400 flex items-center justify-center shrink-0">
-                        <QrCode size={12} strokeWidth={2.2} />
+                    <div className="flex items-start gap-3">
+                      <div className="w-8 h-8 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-google-blue dark:text-blue-400 flex items-center justify-center shrink-0 mt-0.5">
+                        <ArrowLeftRight size={16} strokeWidth={2.2} />
                       </div>
-                      <div className="truncate">
-                        <span className="font-semibold text-text-primary">1-Tap UPI:</span>{' '}
-                        <span className="text-neutral-500 dark:text-neutral-400">Direct settlements via GPay, PhonePe, Paytm</span>
+                      <div className="min-w-0 flex-1">
+                        <div className="text-xs sm:text-sm font-semibold text-text-primary leading-snug">
+                          Simplified Net Balances
+                        </div>
+                        <div className="text-[11px] sm:text-xs text-neutral-500 dark:text-neutral-400 mt-0.5 leading-relaxed">
+                          Automatic debt simplification so everyone settles with the fewest transactions.
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <div className="w-8 h-8 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-google-blue dark:text-blue-400 flex items-center justify-center shrink-0 mt-0.5">
+                        <QrCode size={16} strokeWidth={2.2} />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <div className="text-xs sm:text-sm font-semibold text-text-primary leading-snug">
+                          1-Tap UPI Settlements
+                        </div>
+                        <div className="text-[11px] sm:text-xs text-neutral-500 dark:text-neutral-400 mt-0.5 leading-relaxed">
+                          Settle dues directly in Google Pay, PhonePe, Paytm, or scan UPI QR codes.
+                        </div>
                       </div>
                     </div>
                   </>
                 ) : (
                   <>
-                    <div className="flex items-center gap-2">
-                      <div className="w-5 h-5 rounded-md bg-blue-50 dark:bg-blue-950/60 text-google-blue dark:text-blue-400 flex items-center justify-center shrink-0">
-                        <Wallet size={12} strokeWidth={2.2} />
+                    <div className="flex items-start gap-3">
+                      <div className="w-8 h-8 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-google-blue dark:text-blue-400 flex items-center justify-center shrink-0 mt-0.5">
+                        <Wallet size={16} strokeWidth={2.2} />
                       </div>
-                      <div className="truncate">
-                        <span className="font-semibold text-text-primary">Shared Spending:</span>{' '}
-                        <span className="text-neutral-500 dark:text-neutral-400">Log household expenses with category totals</span>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-2">
-                      <div className="w-5 h-5 rounded-md bg-blue-50 dark:bg-blue-950/60 text-google-blue dark:text-blue-400 flex items-center justify-center shrink-0">
-                        <IndianRupee size={12} strokeWidth={2.2} />
-                      </div>
-                      <div className="truncate">
-                        <span className="font-semibold text-text-primary">Monthly Budgets:</span>{' '}
-                        <span className="text-neutral-500 dark:text-neutral-400">Keep groceries &amp; bills within monthly target</span>
+                      <div className="min-w-0 flex-1">
+                        <div className="text-xs sm:text-sm font-semibold text-text-primary leading-snug">
+                          Shared Expense Tracking
+                        </div>
+                        <div className="text-[11px] sm:text-xs text-neutral-500 dark:text-neutral-400 mt-0.5 leading-relaxed">
+                          Log household spending together with real-time category totals.
+                        </div>
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-2">
-                      <div className="w-5 h-5 rounded-md bg-blue-50 dark:bg-blue-950/60 text-google-blue dark:text-blue-400 flex items-center justify-center shrink-0">
-                        <ShoppingBag size={12} strokeWidth={2.2} />
+                    <div className="flex items-start gap-3">
+                      <div className="w-8 h-8 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-google-blue dark:text-blue-400 flex items-center justify-center shrink-0 mt-0.5">
+                        <IndianRupee size={16} strokeWidth={2.2} />
                       </div>
-                      <div className="truncate">
-                        <span className="font-semibold text-text-primary">Buying List:</span>{' '}
-                        <span className="text-neutral-500 dark:text-neutral-400">Collaborative shopping list to tick off items</span>
+                      <div className="min-w-0 flex-1">
+                        <div className="text-xs sm:text-sm font-semibold text-text-primary leading-snug">
+                          Monthly Category Budgets
+                        </div>
+                        <div className="text-[11px] sm:text-xs text-neutral-500 dark:text-neutral-400 mt-0.5 leading-relaxed">
+                          Set spending caps on groceries, bills, and domestic expenses.
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <div className="w-8 h-8 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-google-blue dark:text-blue-400 flex items-center justify-center shrink-0 mt-0.5">
+                        <ShoppingBag size={16} strokeWidth={2.2} />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <div className="text-xs sm:text-sm font-semibold text-text-primary leading-snug">
+                          Collaborative Buying List
+                        </div>
+                        <div className="text-[11px] sm:text-xs text-neutral-500 dark:text-neutral-400 mt-0.5 leading-relaxed">
+                          Live checklist to add home essentials and tick off purchases.
+                        </div>
                       </div>
                     </div>
                   </>
@@ -425,14 +449,14 @@ export function JoinGroupModal({
 
               {/* Error Notice */}
               {errorMsg ? (
-                <div className="space-y-1.5 pt-0.5 animate-in fade-in duration-200">
-                  <div className="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/25 text-text-primary text-center space-y-0.5">
+                <div className="space-y-2 pt-1 animate-in fade-in duration-200">
+                  <div className="p-3 rounded-2xl bg-amber-500/10 border border-amber-500/25 text-text-primary text-center space-y-1">
                     <h4 className="text-xs font-semibold text-text-primary">
                       {errorMsg.includes('expired') || errorMsg.includes('regenerated')
                         ? 'Invite Link Inactive'
                         : 'Notice'}
                     </h4>
-                    <p className="text-[11px] text-neutral-500 dark:text-neutral-400 leading-tight">
+                    <p className="text-xs text-neutral-500 dark:text-neutral-400 leading-normal">
                       {errorMsg}
                     </p>
                   </div>
@@ -445,7 +469,7 @@ export function JoinGroupModal({
                         setForceManualInput(true);
                         setCode('');
                       }}
-                      className="flex-1 h-9 bg-google-blue hover:bg-google-blue-hover text-white rounded-full text-xs font-semibold transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-xs"
+                      className="flex-1 h-10 bg-google-blue hover:bg-google-blue-hover text-white rounded-full text-xs font-semibold transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-xs"
                     >
                       <span>Enter Code</span>
                     </button>
@@ -453,34 +477,34 @@ export function JoinGroupModal({
                     <button
                       type="button"
                       onClick={onClose}
-                      className="h-9 px-3.5 rounded-full border border-neutral-300 dark:border-neutral-700 hover:bg-surface-hover text-text-secondary hover:text-text-primary text-xs font-medium transition-colors cursor-pointer"
+                      className="h-10 px-4 rounded-full border border-neutral-300 dark:border-neutral-700 hover:bg-surface-hover text-text-secondary hover:text-text-primary text-xs font-medium transition-colors cursor-pointer"
                     >
                       Close
                     </button>
                   </div>
                 </div>
               ) : isJoining ? (
-                <div className="p-3 rounded-xl bg-neutral-50/50 dark:bg-neutral-900/50 border border-neutral-200/90 dark:border-neutral-800 flex items-center justify-center gap-2 text-center">
-                  <div className="w-4 h-4 rounded-full border-2 border-google-blue border-t-transparent animate-spin shrink-0" />
-                  <span className="text-xs font-semibold text-text-primary">
+                <div className="p-4 rounded-2xl bg-neutral-50/50 dark:bg-neutral-900/50 border border-neutral-200/90 dark:border-neutral-800 flex items-center justify-center gap-2.5 text-center">
+                  <div className="w-5 h-5 rounded-full border-2 border-google-blue border-t-transparent animate-spin shrink-0" />
+                  <span className="text-xs sm:text-sm font-semibold text-text-primary">
                     Connecting to {isSplit ? 'Split ' : ''}Ledger...
                   </span>
                 </div>
               ) : !user ? (
-                /* Primary Google Sign-in CTA */
-                <div className="space-y-1 pt-0.5">
+                /* Primary Google Sign-in CTA: Matching Landing Page */
+                <div className="space-y-1.5 pt-1">
                   <button
                     type="button"
                     onClick={handleSignInAndAcceptInvite}
-                    className="w-full h-10 min-[380px]:h-11 rounded-full bg-google-blue hover:bg-google-blue-hover active:scale-[0.99] text-white text-[12px] min-[380px]:text-xs sm:text-sm font-semibold flex items-center justify-center gap-2.5 transition-all shadow-sm cursor-pointer select-none"
+                    className="w-full h-12 rounded-full bg-google-blue hover:bg-google-blue-hover active:scale-[0.99] text-white text-xs sm:text-sm font-semibold flex items-center justify-center gap-3 transition-all shadow-md shadow-google-blue/15 cursor-pointer select-none"
                   >
-                    <div className="w-5 h-5 rounded-full bg-white flex items-center justify-center shrink-0 shadow-2xs">
-                      <GoogleIcon className="w-3 h-3 shrink-0" />
+                    <div className="w-6 h-6 rounded-full bg-white flex items-center justify-center shrink-0 shadow-2xs">
+                      <GoogleIcon className="w-3.5 h-3.5 shrink-0" />
                     </div>
                     <span>Join {isSplit ? 'Split Group ' : 'Ledger '}with Google</span>
                   </button>
 
-                  <p className="text-[10px] min-[380px]:text-[11px] text-neutral-500 dark:text-neutral-400 text-center font-normal">
+                  <p className="text-[11px] sm:text-xs text-neutral-500 dark:text-neutral-400 text-center font-normal">
                     Synced across every device · No app install needed
                   </p>
 
@@ -488,7 +512,7 @@ export function JoinGroupModal({
                     <button
                       type="button"
                       onClick={onClose}
-                      className="text-[10px] min-[380px]:text-[11px] text-neutral-500 hover:text-text-primary transition-colors cursor-pointer"
+                      className="text-xs text-neutral-500 hover:text-text-primary transition-colors cursor-pointer"
                     >
                       Decline &amp; continue to app
                     </button>
@@ -496,30 +520,30 @@ export function JoinGroupModal({
                 </div>
               ) : (
                 /* Signed-in user view */
-                <div className="space-y-1.5 pt-0.5">
-                  <div className="px-3 py-1.5 rounded-xl bg-neutral-50/70 dark:bg-neutral-900/70 border border-neutral-200/90 dark:border-neutral-800 flex items-center justify-between gap-2 text-xs">
-                    <div className="flex items-center gap-2 min-w-0">
-                      <div className="w-5 h-5 rounded-full bg-google-blue/10 text-google-blue font-bold flex items-center justify-center text-[10px] shrink-0">
+                <div className="space-y-2 pt-1">
+                  <div className="px-3.5 py-2 rounded-2xl bg-neutral-50/70 dark:bg-neutral-900/70 border border-neutral-200/90 dark:border-neutral-800 flex items-center justify-between gap-2.5 text-xs">
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <div className="w-7 h-7 rounded-full bg-google-blue/10 text-google-blue font-bold flex items-center justify-center text-xs shrink-0">
                         {(user.displayName || user.email || 'U').charAt(0).toUpperCase()}
                       </div>
                       <div className="min-w-0">
-                        <div className="font-semibold text-text-primary truncate leading-tight text-[11px]">
+                        <div className="font-semibold text-text-primary truncate leading-tight">
                           {user.displayName || 'Google User'}
                         </div>
-                        <div className="text-[10px] text-text-secondary truncate">
+                        <div className="text-[11px] text-text-secondary truncate">
                           {user.email}
                         </div>
                       </div>
                     </div>
-                    <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-semibold shrink-0">
+                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-semibold shrink-0">
                       Signed In
                     </span>
                   </div>
 
                   {alreadyInGroup ? (
-                    <div className="space-y-1 pt-0.5">
-                      <div className="p-2 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-300 text-[11px] font-medium flex items-center gap-1.5">
-                        <Check size={13} className="text-emerald-600 shrink-0" />
+                    <div className="space-y-1.5 pt-0.5">
+                      <div className="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-300 text-xs font-medium flex items-center gap-2">
+                        <Check size={14} className="text-emerald-600 shrink-0" />
                         <span>Already {isOwnerOfGroup ? 'an admin' : 'a member'} of <strong>"{alreadyInGroup.name}"</strong></span>
                       </div>
 
@@ -529,19 +553,19 @@ export function JoinGroupModal({
                           onJoined(alreadyInGroup.id, alreadyInGroup.name);
                           onClose();
                         }}
-                        className="w-full h-10 bg-google-blue hover:bg-google-blue-hover text-white rounded-full text-xs font-semibold transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-xs active:scale-[0.99]"
+                        className="w-full h-11 bg-google-blue hover:bg-google-blue-hover text-white rounded-full text-xs sm:text-sm font-semibold transition-all cursor-pointer flex items-center justify-center gap-2 shadow-xs active:scale-[0.99]"
                       >
                         <span>Open "{alreadyInGroup.name}" Ledger</span>
-                        <ArrowRight size={13} />
+                        <ArrowRight size={14} />
                       </button>
                     </div>
                   ) : (
                     <button
                       type="button"
                       onClick={() => executeJoin(initialCode || code, user)}
-                      className="w-full h-10 min-[380px]:h-11 bg-google-blue hover:bg-google-blue-hover text-white rounded-full text-xs sm:text-sm font-semibold transition-all cursor-pointer flex items-center justify-center gap-2 shadow-xs active:scale-[0.99]"
+                      className="w-full h-12 bg-google-blue hover:bg-google-blue-hover text-white rounded-full text-xs sm:text-sm font-semibold transition-all cursor-pointer flex items-center justify-center gap-2 shadow-md shadow-google-blue/15 active:scale-[0.99]"
                     >
-                      <Check size={14} strokeWidth={2.5} />
+                      <Check size={15} strokeWidth={2.5} />
                       <span>Accept &amp; Join {isSplit ? 'Split Group' : 'Ledger'}</span>
                     </button>
                   )}
@@ -550,14 +574,14 @@ export function JoinGroupModal({
             </div>
           ) : (
             /* SCENARIO 2: MANUAL JOIN VIA INVITE CODE */
-            <div className="space-y-2.5">
+            <div className="space-y-3.5">
               {!user ? (
-                <div className="text-center space-y-2 py-0.5">
-                  <div className="space-y-0.5">
-                    <h3 className="text-sm font-serif text-text-primary tracking-tight">
+                <div className="text-center space-y-3 py-1">
+                  <div className="space-y-1">
+                    <h3 className="text-base sm:text-lg font-serif text-text-primary tracking-tight">
                       Sign in with Google to Join
                     </h3>
-                    <p className="text-[11px] text-neutral-500 dark:text-neutral-400 leading-normal max-w-xs mx-auto">
+                    <p className="text-xs text-neutral-500 dark:text-neutral-400 leading-normal max-w-xs mx-auto">
                       Sign in with your Google account to enter an invite code and join any split or expense ledger.
                     </p>
                   </div>
@@ -571,19 +595,19 @@ export function JoinGroupModal({
                         console.error(e);
                       }
                     }}
-                    className="w-full h-10 min-[380px]:h-11 rounded-full bg-google-blue hover:bg-google-blue-hover active:scale-[0.99] text-white text-xs font-semibold flex items-center justify-center gap-2.5 transition-all shadow-sm cursor-pointer select-none"
+                    className="w-full h-12 rounded-full bg-google-blue hover:bg-google-blue-hover active:scale-[0.99] text-white text-xs sm:text-sm font-semibold flex items-center justify-center gap-3 transition-all shadow-md shadow-google-blue/15 cursor-pointer select-none"
                   >
-                    <div className="w-5 h-5 rounded-full bg-white flex items-center justify-center shrink-0 shadow-2xs">
-                      <GoogleIcon className="w-3 h-3 shrink-0" />
+                    <div className="w-6 h-6 rounded-full bg-white flex items-center justify-center shrink-0 shadow-2xs">
+                      <GoogleIcon className="w-3.5 h-3.5 shrink-0" />
                     </div>
                     <span>Continue with Google</span>
                   </button>
                 </div>
               ) : (
-                <form onSubmit={handleManualSubmit} className="space-y-2.5">
+                <form onSubmit={handleManualSubmit} className="space-y-3">
                   <div>
-                    <div className="flex items-center justify-between mb-1">
-                      <label className="block text-[11px] font-semibold uppercase tracking-wider text-text-secondary">
+                    <div className="flex items-center justify-between mb-1.5">
+                      <label className="block text-xs font-semibold uppercase tracking-wider text-text-secondary">
                         Invite Code
                       </label>
                       {typeof navigator !== 'undefined' && navigator.clipboard && (
@@ -599,9 +623,9 @@ export function JoinGroupModal({
                               }
                             } catch {}
                           }}
-                          className="text-[11px] text-google-blue hover:text-blue-700 font-medium flex items-center gap-1 cursor-pointer transition-colors"
+                          className="text-xs text-google-blue hover:text-blue-700 font-medium flex items-center gap-1 cursor-pointer transition-colors"
                         >
-                          <ClipboardPaste size={11} />
+                          <ClipboardPaste size={12} />
                           <span>Paste Code</span>
                         </button>
                       )}
@@ -615,35 +639,35 @@ export function JoinGroupModal({
                         value={code}
                         onChange={(e) => setCode(parseCodeInput(e.target.value))}
                         placeholder="e.g. AXCD5CQS"
-                        className="w-full px-3 py-2 rounded-xl bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 text-center font-mono text-base tracking-widest text-text-primary outline-none focus:border-google-blue uppercase font-bold transition-all"
+                        className="w-full px-4 py-2.5 rounded-2xl bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 text-center font-mono text-base tracking-widest text-text-primary outline-none focus:border-google-blue uppercase font-bold transition-all"
                       />
                       {code && (
                         <button
                           type="button"
                           onClick={() => setCode('')}
-                          className="absolute right-2.5 top-2 text-text-secondary hover:text-text-primary p-0.5 rounded-full cursor-pointer"
+                          className="absolute right-3 top-2.5 text-text-secondary hover:text-text-primary p-1 rounded-full cursor-pointer"
                           title="Clear code"
                         >
-                          <X size={13} />
+                          <X size={14} />
                         </button>
                       )}
                     </div>
-                    <p className="text-[10px] text-neutral-500 dark:text-neutral-400 mt-1 text-center">
-                      Paste the 8-character code or shared link from your admin.
+                    <p className="text-[11px] text-neutral-500 dark:text-neutral-400 mt-1.5 text-center">
+                      Paste the 8-character code or shared link from your ledger admin.
                     </p>
                   </div>
 
                   {errorMsg && (
-                    <div className="p-2 bg-red-500/10 border border-red-500/20 rounded-xl text-[11px] text-google-red flex items-start gap-1.5">
-                      <AlertCircle size={13} className="shrink-0 mt-0.5" />
+                    <div className="p-2.5 bg-red-500/10 border border-red-500/20 rounded-2xl text-xs text-google-red flex items-start gap-2">
+                      <AlertCircle size={14} className="shrink-0 mt-0.5" />
                       <span>{errorMsg}</span>
                     </div>
                   )}
 
                   {alreadyInGroup ? (
-                    <div className="space-y-1 pt-0.5">
-                      <div className="p-2 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-300 text-[11px] font-medium flex items-center gap-1.5">
-                        <Check size={13} className="text-emerald-600 shrink-0" />
+                    <div className="space-y-1.5 pt-0.5">
+                      <div className="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-300 text-xs font-medium flex items-center gap-2">
+                        <Check size={14} className="text-emerald-600 shrink-0" />
                         <span>Already {isOwnerOfGroup ? 'an admin' : 'a member'} of <strong>"{alreadyInGroup.name}"</strong></span>
                       </div>
 
@@ -653,19 +677,19 @@ export function JoinGroupModal({
                           onJoined(alreadyInGroup.id, alreadyInGroup.name);
                           onClose();
                         }}
-                        className="w-full h-10 bg-google-blue hover:bg-google-blue-hover text-white rounded-full text-xs font-semibold transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-xs active:scale-[0.99]"
+                        className="w-full h-11 bg-google-blue hover:bg-google-blue-hover text-white rounded-full text-xs sm:text-sm font-semibold transition-all cursor-pointer flex items-center justify-center gap-2 shadow-xs active:scale-[0.99]"
                       >
                         <span>Open "{alreadyInGroup.name}" Ledger</span>
-                        <ArrowRight size={13} />
+                        <ArrowRight size={14} />
                       </button>
                     </div>
                   ) : (
                     <button
                       type="submit"
                       disabled={isJoining || !code.trim() || lockoutSeconds > 0}
-                      className="w-full h-10 bg-google-blue hover:bg-google-blue-hover disabled:opacity-40 text-white rounded-full text-xs font-semibold transition-all cursor-pointer flex items-center justify-center gap-2 shadow-xs active:scale-[0.99]"
+                      className="w-full h-11 bg-google-blue hover:bg-google-blue-hover disabled:opacity-40 text-white rounded-full text-xs sm:text-sm font-semibold transition-all cursor-pointer flex items-center justify-center gap-2 shadow-xs active:scale-[0.99]"
                     >
-                      <Check size={14} strokeWidth={2.5} />
+                      <Check size={15} strokeWidth={2.5} />
                       <span>{lockoutSeconds > 0 ? `Wait ${lockoutSeconds}s` : isJoining ? 'Joining Ledger...' : 'Join Ledger'}</span>
                     </button>
                   )}

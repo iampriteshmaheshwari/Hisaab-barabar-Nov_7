@@ -57,7 +57,7 @@ export function LedgerContextModal({
       onClick={onClose}
     >
       <div 
-        className="bg-surface dark:bg-[#12151c] w-full sm:max-w-md rounded-t-3xl sm:rounded-3xl shadow-2xl border border-neutral-200/90 dark:border-neutral-800 overflow-hidden animate-in slide-in-from-bottom duration-200 flex flex-col"
+        className="bg-surface dark:bg-[#12151c] w-full max-w-[420px] sm:max-w-md rounded-3xl shadow-2xl border border-neutral-200/90 dark:border-neutral-800 overflow-hidden animate-in fade-in zoom-in-95 duration-150 flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Mobile Grab Handle */}
