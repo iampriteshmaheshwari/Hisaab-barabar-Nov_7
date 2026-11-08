@@ -11,9 +11,10 @@ import {
   Send,
   Loader2,
   Wallet,
-  Receipt,
+  IndianRupee,
   ShoppingBag,
-  ArrowRight
+  ArrowRight,
+  ArrowLeftRight
 } from 'lucide-react';
 import type { ExpenseGroup, UserRole } from '../../types';
 import { useAuth } from '../../context/AuthContext';
@@ -119,7 +120,7 @@ export function InviteMemberModal({
         <div className="p-4 sm:p-5 border-b border-border/80 flex items-center justify-between gap-3">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-2xl bg-google-blue/10 text-google-blue flex items-center justify-center shrink-0">
-              {isSplit ? <Receipt size={20} strokeWidth={2.2} /> : <UserPlus size={20} strokeWidth={2.2} />}
+              {isSplit ? <Users size={20} strokeWidth={2.2} /> : <Wallet size={20} strokeWidth={2.2} />}
             </div>
             <div>
               <div className="flex items-center gap-2">
@@ -251,7 +252,7 @@ export function InviteMemberModal({
             {isSplit ? (
               <div className="space-y-2 text-xs sm:text-sm text-text-secondary">
                 <div className="flex items-center gap-2.5 text-text-primary font-medium">
-                  <Receipt size={15} className="text-google-blue shrink-0" />
+                  <ArrowLeftRight size={15} className="text-google-blue shrink-0" />
                   <span>Fair bill splits with real-time balance calculations</span>
                 </div>
                 <div className="flex items-center gap-2.5 text-text-primary font-medium">
