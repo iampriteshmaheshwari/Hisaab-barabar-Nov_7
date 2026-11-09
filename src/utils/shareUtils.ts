@@ -58,17 +58,41 @@ export async function shareGroupInviteLink(
     }
   }
 
-  // 2. Fallback: Copy URL to clipboard
+  // 2. Fallback: Copy URL to clipboard (Desktop browsers, standalone PWA)
   try {
-    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+    if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
       await navigator.clipboard.writeText(url);
       if (showToast) showToast('Invite link copied to clipboard!');
       return { shared: false, copied: true };
     }
   } catch {
-    if (showToast) showToast('Invite link: ' + url);
+    // Clipboard API blocked or restricted, continue to execCommand fallback
   }
 
+  // 3. Fallback execCommand for desktop / restricted iframe contexts
+  try {
+    if (typeof document !== 'undefined') {
+      const textArea = document.createElement('textarea');
+      textArea.value = url;
+      textArea.style.position = 'fixed';
+      textArea.style.opacity = '0';
+      textArea.style.left = '-9999px';
+      textArea.style.top = '0';
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      const success = document.execCommand('copy');
+      document.body.removeChild(textArea);
+      if (success) {
+        if (showToast) showToast('Invite link copied to clipboard!');
+        return { shared: false, copied: true };
+      }
+    }
+  } catch {
+    // ignore
+  }
+
+  if (showToast) showToast('Invite link: ' + url);
   return { shared: false, copied: false };
 }
 
@@ -83,13 +107,37 @@ export async function copyGroupInviteCode(
   if (!code) return false;
 
   try {
-    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+    if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
       await navigator.clipboard.writeText(code);
       if (showToast) showToast('Invite code copied to clipboard!');
       return true;
     }
   } catch {
-    if (showToast) showToast('Invite code: ' + code);
+    // Fallback to execCommand
   }
+
+  try {
+    if (typeof document !== 'undefined') {
+      const textArea = document.createElement('textarea');
+      textArea.value = code;
+      textArea.style.position = 'fixed';
+      textArea.style.opacity = '0';
+      textArea.style.left = '-9999px';
+      textArea.style.top = '0';
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      const success = document.execCommand('copy');
+      document.body.removeChild(textArea);
+      if (success) {
+        if (showToast) showToast('Invite code copied to clipboard!');
+        return true;
+      }
+    }
+  } catch {
+    // ignore
+  }
+
+  if (showToast) showToast('Invite code: ' + code);
   return false;
 }

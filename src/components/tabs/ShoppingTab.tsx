@@ -9,7 +9,7 @@ import {
   Clock,
   Tag,
   ChevronDown,
-  Receipt,
+  IndianRupee,
   X,
   AlertCircle,
   Pencil,
@@ -417,7 +417,7 @@ export function ShoppingTab({
         <div className="bg-surface rounded-2xl border border-border p-3.5 sm:p-4 shadow-xs flex items-center justify-between gap-3 transition-all animate-in fade-in duration-200">
           <div className="flex items-center gap-3 min-w-0">
             <div className="w-9 h-9 rounded-xl bg-google-blue/10 text-google-blue flex items-center justify-center shrink-0">
-              <Receipt size={18} />
+              <IndianRupee size={18} />
             </div>
             <div className="min-w-0">
               <div className="text-xs sm:text-sm font-semibold text-text-primary flex items-center gap-1.5">

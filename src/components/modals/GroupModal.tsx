@@ -19,7 +19,8 @@ import {
   RotateCw,
   LogIn,
   Wallet,
-  BookOpen
+  BookOpen,
+  Pencil
 } from 'lucide-react';
 import type { ExpenseGroup, UserRole, GroupMember } from '../../types';
 import { useAuth } from '../../context/AuthContext';
@@ -44,6 +45,7 @@ interface GroupModalProps {
   onDeleteGroup?: (groupId: string) => Promise<void>;
   onOpenJoinModal?: () => void;
   onOpenInviteModal?: () => void;
+  onUpdateGroupName?: (groupId: string, newName: string) => Promise<void>;
 }
 
 export function GroupModal({
@@ -57,7 +59,8 @@ export function GroupModal({
   onCreateGroup,
   onDeleteGroup,
   onOpenJoinModal,
-  onOpenInviteModal
+  onOpenInviteModal,
+  onUpdateGroupName
 }: GroupModalProps) {
   const { user, signInWithGoogle } = useAuth();
   const [copiedCode, setCopiedCode] = useState(false);
@@ -72,6 +75,9 @@ export function GroupModal({
   const [isDeletingGroup, setIsDeletingGroup] = useState(false);
   const [isRegeneratingCode, setIsRegeneratingCode] = useState(false);
   const [showRegenerateConfirm, setShowRegenerateConfirm] = useState(false);
+  const [isEditingName, setIsEditingName] = useState(false);
+  const [editedName, setEditedName] = useState('');
+  const [isSavingName, setIsSavingName] = useState(false);
 
   // Sync initial tab whenever modal is re-opened
   useEffect(() => {
@@ -79,6 +85,7 @@ export function GroupModal({
       setActiveTab(initialTab);
       setStatusMessage(null);
       setShowRegenerateConfirm(false);
+      setIsEditingName(false);
     }
   }, [isOpen, initialTab]);
 
@@ -103,6 +110,20 @@ export function GroupModal({
       showToast(err?.message || 'Could not regenerate invite code.');
     } finally {
       setIsRegeneratingCode(false);
+    }
+  };
+
+  const handleSaveName = async () => {
+    if (!activeGroup || !editedName.trim() || !onUpdateGroupName) return;
+    setIsSavingName(true);
+    try {
+      await onUpdateGroupName(activeGroup.id, editedName.trim());
+      showToast('Ledger name updated');
+      setIsEditingName(false);
+    } catch (err: any) {
+      showToast(err?.message || 'Could not update name');
+    } finally {
+      setIsSavingName(false);
     }
   };
 
@@ -250,18 +271,72 @@ export function GroupModal({
 
         {/* Modal Header */}
         <div className="px-5 py-4 border-b border-border flex items-center justify-between shrink-0">
-          <div className="min-w-0 pr-2">
-            <div className="flex items-center gap-2">
-              <span className="text-base sm:text-lg font-bold text-text-primary truncate">
-                {activeGroup ? activeGroup.name : 'Ledgers & Groups'}
-              </span>
-              <span className="px-2 py-0.5 rounded-md text-xs font-medium bg-surface-hover text-text-secondary border border-border">
-                {userRole === 'owner' ? 'Admin' : 'Member'}
-              </span>
-            </div>
-            <div className="text-xs text-text-secondary mt-0.5">
-              {groups.length} active ledger{groups.length === 1 ? '' : 's'}
-            </div>
+          <div className="min-w-0 pr-2 flex-1">
+            {isEditingName ? (
+              <div className="flex items-center gap-2 py-0.5" onClick={(e) => e.stopPropagation()}>
+                <input
+                  type="text"
+                  value={editedName}
+                  onChange={(e) => setEditedName(e.target.value)}
+                  maxLength={80}
+                  autoFocus
+                  placeholder="Ledger name"
+                  className="h-8 px-2.5 text-xs sm:text-sm font-semibold rounded-lg border border-border bg-surface text-text-primary focus:outline-none focus:border-google-blue min-w-[150px] max-w-[220px]"
+                  onKeyDown={async (e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      await handleSaveName();
+                    } else if (e.key === 'Escape') {
+                      setIsEditingName(false);
+                    }
+                  }}
+                />
+                <button
+                  type="button"
+                  disabled={isSavingName || !editedName.trim()}
+                  onClick={handleSaveName}
+                  className="h-8 px-2.5 rounded-lg bg-google-blue text-white text-xs font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50 cursor-pointer"
+                >
+                  {isSavingName ? '...' : 'Save'}
+                </button>
+                <button
+                  type="button"
+                  disabled={isSavingName}
+                  onClick={() => setIsEditingName(false)}
+                  className="h-8 px-2 rounded-lg border border-border text-text-secondary text-xs hover:bg-surface-hover transition-colors cursor-pointer"
+                >
+                  Cancel
+                </button>
+              </div>
+            ) : (
+              <>
+                <div className="flex items-center gap-2">
+                  <span className="text-base sm:text-lg font-bold text-text-primary truncate">
+                    {activeGroup ? activeGroup.name : 'Ledgers & Groups'}
+                  </span>
+                  {activeGroup && canManage && onUpdateGroupName && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setEditedName(activeGroup.name);
+                        setIsEditingName(true);
+                      }}
+                      className="p-1 rounded-md text-text-secondary hover:text-text-primary hover:bg-surface-hover transition-colors cursor-pointer inline-flex items-center justify-center"
+                      title="Edit ledger name"
+                      aria-label="Edit ledger name"
+                    >
+                      <Pencil size={13} />
+                    </button>
+                  )}
+                  <span className="px-2 py-0.5 rounded-md text-xs font-medium bg-surface-hover text-text-secondary border border-border">
+                    {userRole === 'owner' ? 'Admin' : 'Member'}
+                  </span>
+                </div>
+                <div className="text-xs text-text-secondary mt-0.5">
+                  {groups.length} active ledger{groups.length === 1 ? '' : 's'}
+                </div>
+              </>
+            )}
           </div>
           <button 
             type="button"

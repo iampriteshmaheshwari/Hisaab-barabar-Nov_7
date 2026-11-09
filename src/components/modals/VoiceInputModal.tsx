@@ -9,7 +9,7 @@ import {
   Loader2, 
   Sparkles, 
   ShoppingBag, 
-  Receipt, 
+  IndianRupee, 
   WifiOff, 
   AlertCircle, 
   ChevronDown, 
@@ -1040,7 +1040,7 @@ export function VoiceInputModal({
                         : 'text-text-secondary hover:text-text-primary'
                     }`}
                   >
-                    <Receipt size={13} />
+                    <IndianRupee size={13} />
                     <span>Expenses ({confirmedExpenses.length})</span>
                   </button>
 
@@ -1064,7 +1064,7 @@ export function VoiceInputModal({
                 <div className="space-y-2">
                   <div className="flex items-center justify-between px-1">
                     <span className="text-xs font-semibold text-text-secondary uppercase tracking-wider flex items-center gap-1.5">
-                      <Receipt size={13} className="text-google-blue" />
+                      <IndianRupee size={13} className="text-google-blue" />
                       <span>Expenses to record ({confirmedExpenses.length})</span>
                     </span>
                     <span className="text-xs font-bold text-text-primary">

@@ -32,6 +32,7 @@ interface InviteMemberModalProps {
   group: ExpenseGroup;
   userRole: UserRole;
   onAddDirectMember?: (nameOrEmail: string) => Promise<boolean | void>;
+  showToast?: (toast: { message: string; type?: 'success' | 'info' | 'error' } | string) => void;
 }
 
 export function InviteMemberModal({
@@ -39,7 +40,8 @@ export function InviteMemberModal({
   onClose,
   group,
   userRole,
-  onAddDirectMember
+  onAddDirectMember,
+  showToast
 }: InviteMemberModalProps) {
   const { user } = useAuth();
   const [copiedCode, setCopiedCode] = useState(false);
@@ -50,6 +52,12 @@ export function InviteMemberModal({
   const [addError, setAddError] = useState<string | null>(null);
 
   const isSplit = group?.type === 'split';
+
+  const notifyToast = (msg: string) => {
+    if (showToast) {
+      showToast(typeof showToast === 'function' && showToast.length ? (msg as any) : { message: msg, type: 'info' });
+    }
+  };
 
   const whatsappUrl = React.useMemo(() => {
     if (!group) return '';
@@ -65,7 +73,7 @@ export function InviteMemberModal({
   const members = getGroupMembersList(group, user?.uid, user?.email || undefined);
 
   const handleCopyCode = async () => {
-    const ok = await copyGroupInviteCode(group);
+    const ok = await copyGroupInviteCode(group, (msg) => notifyToast(msg));
     if (ok) {
       setCopiedCode(true);
       setTimeout(() => setCopiedCode(false), 2200);
@@ -73,16 +81,37 @@ export function InviteMemberModal({
   };
 
   const handleCopyLink = async () => {
+    let success = false;
     try {
-      await navigator.clipboard.writeText(inviteLink);
-      setCopiedLink(true);
-      setTimeout(() => setCopiedLink(false), 2200);
+      if (typeof navigator !== 'undefined' && navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(inviteLink);
+        success = true;
+      }
     } catch {}
+
+    if (!success && typeof document !== 'undefined') {
+      try {
+        const textArea = document.createElement('textarea');
+        textArea.value = inviteLink;
+        textArea.style.position = 'fixed';
+        textArea.style.opacity = '0';
+        textArea.style.left = '-9999px';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        success = document.execCommand('copy');
+        document.body.removeChild(textArea);
+      } catch {}
+    }
+
+    setCopiedLink(true);
+    notifyToast('Invite link copied to clipboard!');
+    setTimeout(() => setCopiedLink(false), 2200);
   };
 
   const handleNativeShare = async () => {
-    const res = await shareGroupInviteLink(group);
-    if (res.copied) {
+    const res = await shareGroupInviteLink(group, (msg) => notifyToast(msg));
+    if (res.copied || res.shared) {
       setCopiedLink(true);
       setTimeout(() => setCopiedLink(false), 2200);
     }

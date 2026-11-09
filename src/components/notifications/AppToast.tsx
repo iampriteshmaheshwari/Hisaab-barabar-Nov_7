@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { 
   CheckCircle2, 
-  Receipt, 
+  IndianRupee, 
   ShoppingBag, 
   CloudCheck, 
   Info, 
@@ -116,7 +116,7 @@ export function AppToast({ toast, onDismiss, categories, hasFab = false }: AppTo
               color: toast.categoryColor || '#60a5fa'
             }}
           >
-            <Receipt size={16} strokeWidth={2.2} />
+            <IndianRupee size={16} strokeWidth={2.2} />
           </div>
         );
       case 'shopping':

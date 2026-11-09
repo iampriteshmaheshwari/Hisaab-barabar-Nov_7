@@ -4,7 +4,7 @@ import {
   CloudUpload, 
   Check, 
   Trash2, 
-  Receipt, 
+  IndianRupee, 
   ShoppingBag, 
   Repeat, 
   ChevronDown,
@@ -202,7 +202,7 @@ export function MergeOfflineModal({
             {/* Expenses */}
             <div className="p-3 rounded-2xl bg-surface-hover/70 border border-border text-center flex flex-col items-center justify-center min-h-[74px]">
               <div className="flex items-center gap-1.5 text-google-blue mb-1">
-                <Receipt size={15} />
+                <IndianRupee size={15} />
                 <span className="text-xs font-semibold">Expenses</span>
               </div>
               <div className="text-sm sm:text-base font-bold text-text-primary leading-tight font-mono tabular-nums">

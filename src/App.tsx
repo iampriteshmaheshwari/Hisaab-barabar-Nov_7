@@ -137,6 +137,7 @@ import {
   getNextOccurrenceDate,
   addDirectMemberToGroup,
   updateGroupMemberUpi,
+  updateGroupName,
   softDeleteExpenseInGroup,
   restoreExpenseInGroup,
   permanentDeleteExpenseFromGroup
@@ -276,6 +277,22 @@ export default function App() {
       } else {
         document.documentElement.classList.remove('dark');
       }
+
+      // Dynamic theme-color and iOS status bar styling sync
+      const themeColor = isDark ? '#0c0d10' : '#f8f9fa';
+      const statusBarStyle = isDark ? 'black-translucent' : 'default';
+
+      try {
+        const themeColorMetas = document.querySelectorAll('meta[name="theme-color"]');
+        themeColorMetas.forEach(meta => {
+          meta.setAttribute('content', themeColor);
+        });
+
+        const statusBarMeta = document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]');
+        if (statusBarMeta) {
+          statusBarMeta.setAttribute('content', statusBarStyle);
+        }
+      } catch {}
     };
 
     applyTheme();
@@ -1289,6 +1306,20 @@ export default function App() {
     } catch (err: any) {
       console.error('Failed to delete group:', err);
       setToastMessage(err?.message || 'Failed to delete ledger');
+      throw err;
+    }
+  };
+
+  // Update group/ledger name handler (supports both cloud and local guest groups)
+  const handleUpdateGroupName = async (groupId: string, newName: string): Promise<void> => {
+    const cleanName = newName.trim();
+    if (!cleanName) return;
+    try {
+      await updateGroupName(groupId, cleanName);
+      setGroups(prev => prev.map(g => g.id === groupId ? { ...g, name: cleanName } : g));
+      showToast({ message: 'Ledger name updated', type: 'success' });
+    } catch (err: any) {
+      showToast({ message: err?.message || 'Could not update ledger name', type: 'error' });
       throw err;
     }
   };
@@ -3909,6 +3940,7 @@ export default function App() {
               onToggleGemini={handleToggleGemini}
               onOpenInviteModal={handleOpenInviteModal}
               onTriggerTestSplitNotification={handleTriggerTestSplitNotification}
+              onUpdateGroupName={handleUpdateGroupName}
             />
           ) : (
             /* Default for split ledger: Group View */
@@ -4048,6 +4080,7 @@ export default function App() {
                 onToggleGemini={handleToggleGemini}
                 onOpenInviteModal={handleOpenInviteModal}
                 onTriggerTestSplitNotification={handleTriggerTestSplitNotification}
+                onUpdateGroupName={handleUpdateGroupName}
               />
             )}
           </>
@@ -4067,6 +4100,7 @@ export default function App() {
         onDeleteGroup={handleDeleteGroup}
         onOpenJoinModal={() => setShowJoinModal(true)}
         onOpenInviteModal={handleOpenInviteModal}
+        onUpdateGroupName={handleUpdateGroupName}
       />
 
       <SoloAuthPromptModal
@@ -4177,6 +4211,7 @@ export default function App() {
           onClose={() => setShowInviteModal(false)}
           group={activeGroup}
           userRole={userRole}
+          showToast={showToast}
           onAddDirectMember={async (nameOrEmail) => {
             const updated = await addDirectMemberToGroup(activeGroup, nameOrEmail, 'editor');
             setGroups(prev => prev.map(g => g.id === updated.id ? updated : g));

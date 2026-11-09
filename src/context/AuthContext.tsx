@@ -38,34 +38,9 @@ const AuthContext = createContext<AuthContextType>({
   reauthenticate: async () => false,
 });
 
-const getInitialDemoUser = (): User | null => {
-  if (typeof window === 'undefined') return null;
-  const isDemo = new URLSearchParams(window.location.search).get('demo') === 'true' || localStorage.getItem('hb_demo_user') === 'true';
-  if (!isDemo) return null;
-  return {
-    uid: 'user_pritesh_123',
-    displayName: 'Pritesh Maheshwari',
-    email: 'iampriteshmaheshwari@gmail.com',
-    photoURL: '',
-    emailVerified: true,
-    isAnonymous: false,
-    metadata: {},
-    providerData: [],
-    refreshToken: '',
-    tenantId: null,
-    delete: async () => {},
-    getIdToken: async () => '',
-    getIdTokenResult: async () => ({} as any),
-    reload: async () => {},
-    toJSON: () => ({}),
-    phoneNumber: null,
-    providerId: 'google.com'
-  } as unknown as User;
-};
-
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(getInitialDemoUser);
-  const [loading, setLoading] = useState<boolean>(() => !getInitialDemoUser());
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
   const [authError, setAuthError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -86,33 +61,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       });
 
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      // Check if demo query param or demo user exists
-      const isDemo = typeof window !== 'undefined' && (new URLSearchParams(window.location.search).get('demo') === 'true' || localStorage.getItem('hb_demo_user') === 'true');
-      if (!currentUser && isDemo) {
-        const demoUser = {
-          uid: 'user_pritesh_123',
-          displayName: 'Pritesh Maheshwari',
-          email: 'iampriteshmaheshwari@gmail.com',
-          photoURL: '',
-          emailVerified: true,
-          isAnonymous: false,
-          metadata: {},
-          providerData: [],
-          refreshToken: '',
-          tenantId: null,
-          delete: async () => {},
-          getIdToken: async () => '',
-          getIdTokenResult: async () => ({} as any),
-          reload: async () => {},
-          toJSON: () => ({}),
-          phoneNumber: null,
-          providerId: 'google.com'
-        } as unknown as User;
-        setUser(demoUser);
-        setLoading(false);
-        return;
-      }
-
       setUser(currentUser);
       setLoading(false);
 

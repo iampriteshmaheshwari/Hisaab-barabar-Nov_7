@@ -1795,4 +1795,52 @@ export async function saveUserLedgerGeminiPreference(
   }
 }
 
+/**
+ * Updates the name of an existing ledger / group in Firestore and local storage.
+ */
+export async function updateGroupName(groupId: string, newName: string): Promise<void> {
+  const cleanName = newName.trim();
+  if (!cleanName) {
+    throw new Error('Ledger name cannot be empty');
+  }
+  if (cleanName.length > 80) {
+    throw new Error('Ledger name is too long (maximum 80 characters)');
+  }
+
+  // Update local storage groups cache
+  const localGroupsStr = localStorage.getItem('hisaab_groups');
+  if (localGroupsStr) {
+    try {
+      const localGroups: ExpenseGroup[] = JSON.parse(localGroupsStr);
+      const updatedLocal = localGroups.map(g => g.id === groupId ? { ...g, name: cleanName, updatedAt: new Date().toISOString() } : g);
+      localStorage.setItem('hisaab_groups', JSON.stringify(updatedLocal));
+    } catch {}
+  }
+
+  // Update active group in local storage if matching
+  const activeGrpStr = localStorage.getItem('hisaab_active_group');
+  if (activeGrpStr) {
+    try {
+      const activeGrp = JSON.parse(activeGrpStr);
+      if (activeGrp.id === groupId) {
+        localStorage.setItem('hisaab_active_group', JSON.stringify({ ...activeGrp, name: cleanName, updatedAt: new Date().toISOString() }));
+      }
+    } catch {}
+  }
+
+  // Update in Firestore for cloud groups
+  if (!groupId.startsWith('local_') && groupId !== 'local_group') {
+    try {
+      await updateDoc(doc(db, 'groups', groupId), {
+        name: cleanName,
+        updatedAt: new Date().toISOString()
+      });
+    } catch (error) {
+      handleFirestoreError(error, OperationType.UPDATE, `groups/${groupId}`);
+      throw error;
+    }
+  }
+}
+
+
 

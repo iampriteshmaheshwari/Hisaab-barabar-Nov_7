@@ -31,7 +31,8 @@ import {
   QrCode,
   Copy,
   CheckCheck,
-  Info
+  Info,
+  Pencil
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import type { ExpenseGroup, CategoryData, UserRole, ThemeMode, Transaction, ShoppingItem, RecurringExpense } from '../../types';
@@ -92,6 +93,7 @@ interface SettingsTabProps {
   pendingSyncCount?: number;
   onOpenInviteModal?: () => void;
   onTriggerTestSplitNotification?: () => void;
+  onUpdateGroupName?: (groupId: string, newName: string) => Promise<void>;
 }
 
 export function SettingsTab({
@@ -133,7 +135,8 @@ export function SettingsTab({
   currentUserUpi,
   pendingSyncCount = 0,
   onOpenInviteModal,
-  onTriggerTestSplitNotification
+  onTriggerTestSplitNotification,
+  onUpdateGroupName
 }: SettingsTabProps) {
   const { user, signInWithGoogle, logOut } = useAuth();
   const [isSyncing, setIsSyncing] = useState(false);
@@ -144,6 +147,36 @@ export function SettingsTab({
   const [showPendingSignOutConfirm, setShowPendingSignOutConfirm] = useState(false);
   const [deleteCategoryKey, setDeleteCategoryKey] = useState<string | null>(null);
   const [isDeletingCat, setIsDeletingCat] = useState(false);
+
+  // Group / Ledger Name Editing (Subtle, high quality)
+  const [isEditingGroupName, setIsEditingGroupName] = useState(false);
+  const [editedGroupName, setEditedGroupName] = useState('');
+  const [isSavingGroupName, setIsSavingGroupName] = useState(false);
+  const [groupNameError, setGroupNameError] = useState<string | null>(null);
+
+  const handleStartEditGroupName = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!activeGroup) return;
+    setEditedGroupName(activeGroup.name);
+    setGroupNameError(null);
+    setIsEditingGroupName(true);
+  };
+
+  const handleSaveGroupName = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    const clean = editedGroupName.trim();
+    if (!activeGroup || !clean || !onUpdateGroupName) return;
+    setIsSavingGroupName(true);
+    setGroupNameError(null);
+    try {
+      await onUpdateGroupName(activeGroup.id, clean);
+      setIsEditingGroupName(false);
+    } catch (err: any) {
+      setGroupNameError(err?.message || 'Could not update name');
+    } finally {
+      setIsSavingGroupName(false);
+    }
+  };
 
   const formattedDigestTime = formatDigestTime(digestTime);
   const isDefaultTime = digestTime === DEFAULT_DIGEST_TIME;
@@ -609,31 +642,93 @@ export function SettingsTab({
 
         <div className="bg-surface rounded-3xl border border-border divide-y divide-border overflow-hidden shadow-xs">
           {/* Active Ledger Info */}
-          <button
-            type="button"
-            onClick={() => onOpenGroupModal('members')}
-            className="w-full p-4 sm:p-4.5 flex items-center justify-between gap-3 hover:bg-surface-hover/50 transition-colors cursor-pointer text-left"
-          >
-            <div className="min-w-0 flex-1">
-              <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-sm sm:text-base font-bold text-text-primary truncate">
-                  {activeGroup ? activeGroup.name : 'Personal Ledger'}
+          {isEditingGroupName ? (
+            <div className="p-4 sm:p-4.5 space-y-2 bg-surface-hover/30" onClick={(e) => e.stopPropagation()}>
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-semibold uppercase tracking-wider text-text-secondary">
+                  Edit Ledger Name
                 </span>
-                <span className="text-xs font-medium px-2 py-0.5 rounded-md bg-surface-hover text-text-secondary border border-border">
-                  {isSplit ? 'Split Ledger' : 'Expense Tracker'}
+                <span className="text-2xs text-text-secondary">
+                  Press Enter to save
                 </span>
               </div>
-              <div className="text-xs sm:text-sm text-text-secondary mt-1 flex items-center gap-2 flex-wrap">
-                <span>Invite code: <strong className="font-mono font-bold text-text-primary tracking-wider">{activeGroup?.inviteCode || 'N/A'}</strong></span>
-                <span>•</span>
-                <span>Role: <strong className="font-medium text-text-primary">{userRole === 'owner' ? 'Admin' : userRole === 'viewer' ? 'View Only' : 'Can Edit'}</strong></span>
+              <div className="flex items-center gap-2">
+                <input
+                  type="text"
+                  value={editedGroupName}
+                  onChange={(e) => setEditedGroupName(e.target.value)}
+                  maxLength={80}
+                  autoFocus
+                  placeholder="Enter ledger name"
+                  className="h-9 px-3 rounded-xl border border-border bg-surface text-xs sm:text-sm text-text-primary focus:outline-none focus:border-google-blue min-w-0 flex-1 font-medium"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      handleSaveGroupName();
+                    } else if (e.key === 'Escape') {
+                      setIsEditingGroupName(false);
+                    }
+                  }}
+                />
+                <button
+                  type="button"
+                  disabled={isSavingGroupName || !editedGroupName.trim()}
+                  onClick={() => handleSaveGroupName()}
+                  className="h-9 px-3.5 rounded-xl bg-google-blue text-white text-xs font-semibold hover:bg-blue-700 transition-colors disabled:opacity-50 cursor-pointer shrink-0"
+                >
+                  {isSavingGroupName ? 'Saving...' : 'Save'}
+                </button>
+                <button
+                  type="button"
+                  disabled={isSavingGroupName}
+                  onClick={() => setIsEditingGroupName(false)}
+                  className="h-9 px-3 rounded-xl border border-border bg-surface hover:bg-surface-hover text-text-secondary text-xs font-medium transition-colors cursor-pointer shrink-0"
+                >
+                  Cancel
+                </button>
               </div>
+              {groupNameError && (
+                <p className="text-xs text-rose-500 font-medium">{groupNameError}</p>
+              )}
             </div>
-            <div className="flex items-center gap-1 text-xs sm:text-sm text-google-blue font-semibold shrink-0">
-              <span>Manage</span>
-              <ChevronRight size={16} />
+          ) : (
+            <div className="w-full p-4 sm:p-4.5 flex items-center justify-between gap-3 hover:bg-surface-hover/50 transition-colors">
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className="text-sm sm:text-base font-bold text-text-primary truncate">
+                    {activeGroup ? activeGroup.name : 'Personal Ledger'}
+                  </span>
+                  {activeGroup && userRole !== 'viewer' && onUpdateGroupName && (
+                    <button
+                      type="button"
+                      onClick={handleStartEditGroupName}
+                      className="p-1 rounded-md text-text-secondary hover:text-text-primary hover:bg-surface-active transition-colors cursor-pointer inline-flex items-center justify-center"
+                      title="Edit ledger name"
+                      aria-label="Edit ledger name"
+                    >
+                      <Pencil size={12} />
+                    </button>
+                  )}
+                  <span className="text-xs font-medium px-2 py-0.5 rounded-md bg-surface-hover text-text-secondary border border-border">
+                    {isSplit ? 'Split Ledger' : 'Expense Tracker'}
+                  </span>
+                </div>
+                <div className="text-xs sm:text-sm text-text-secondary mt-1 flex items-center gap-2 flex-wrap">
+                  <span>Invite code: <strong className="font-mono font-bold text-text-primary tracking-wider">{activeGroup?.inviteCode || 'N/A'}</strong></span>
+                  <span>•</span>
+                  <span>Role: <strong className="font-medium text-text-primary">{userRole === 'owner' ? 'Admin' : userRole === 'viewer' ? 'View Only' : 'Can Edit'}</strong></span>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => onOpenGroupModal('members')}
+                className="flex items-center gap-1 text-xs sm:text-sm text-google-blue font-semibold shrink-0 hover:underline cursor-pointer"
+              >
+                <span>Manage</span>
+                <ChevronRight size={16} />
+              </button>
             </div>
-          </button>
+          )}
 
           {/* Join Another Ledger Row */}
           {onOpenJoinModal && (
